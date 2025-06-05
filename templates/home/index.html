@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <h2 class="fw-bold">Hello, {{ user_name }}! Welcome to LucidApp Demo</h2>
+      <p class="text-muted">A simple tool to manage orders, track sales, and monitor performance — all in one place.</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="card-title fw-semibold">📦 Order Management</h5>
+          <p class="card-text">Track local and international orders, view delivery status, and update progress with ease.</p>
+          <a href="#" class="btn btn-outline-primary">View Orders</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="card-title fw-semibold">💰 Sales</h5>
+          <p class="card-text">Record transactions, withdrawals, and bank transfers. Keep your books clean and current.</p>
+          <a href="#" class="btn btn-outline-success">Go to Bank</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body">
+          <h5 class="card-title fw-semibold">📊 Performance</h5>
+          <p class="card-text">See your financial performance over time. Review order delivery and revenue insights.</p>
+          <a href="#" class="btn btn-outline-dark">Check Performance</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

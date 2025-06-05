@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LucidApp Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .sidebar {
+      height: 100vh;
+      padding: 1rem;
+      background-color: #ffffff;
+      border-right: 1px solid #dee2e6;
+    }
+    .sidebar .nav-link {
+      color: #333;
+    }
+    .sidebar .nav-link:hover {
+      background-color: #f1f1f1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <nav class="col-md-3 col-lg-2 d-md-block sidebar">
+        <h4 class="fw-bold mb-4">LucidApp</h4>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <form method="post" action="{% url 'home:logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Sign Out</button>
+            </form>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home:home' %}">🏠 Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#ordersMenu" role="button" aria-expanded="false">
+              🧾 Store
+            </a>
+            <div class="collapse" id="ordersMenu">
+              <ul class="list-unstyled ms-3">
+                <li><a href="{% url 'orders:new_order' %}" class="nav-link"> New Store Order</a></li>
+                <li><a href="{% url 'orders:view_orders' %}" class="nav-link">View Store Orders</a></li>
+                <li><a href="{% url 'sales:new_sale' %}" class="nav-link">Register Store Sale</a></li>
+                <li><a href="{% url 'sales:new_online_sale' %}" class="nav-link">Register Online Sale</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#bankMenu" role="button" aria-expanded="false">
+              🏦 Bank
+            </a>
+            <div class="collapse" id="bankMenu">
+              <ul class="list-unstyled ms-3">
+                <li><a href="{% url 'bank:withdrawal' %}" class="nav-link">Withdraw</a></li>
+                <li><a href="{% url 'bank:deposit' %}" class="nav-link">Deposit</a></li>
+                <li><a href="{% url 'bank:statement' %}" class="nav-link">Statement</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#performanceMenu" role="button" aria-expanded="false">
+              📈 Performance
+            </a>
+            <div class="collapse" id="performanceMenu">
+              <ul class="list-unstyled ms-3">
+                <li><a href="#" class="nav-link">View Orders</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+        {% block content %}
+        <!-- Page content will go here -->
+        {% endblock %}
+      </main>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
