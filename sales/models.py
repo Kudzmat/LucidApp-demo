@@ -1,15 +1,55 @@
 from django.utils.timezone import now
 from decimal import Decimal
 from django.db import models
+import random
 
-class StorePurchase(models.Model):
-    date = models.DateTimeField(default=now)
-    item = models.CharField(
+
+class Inventory(models.Model):
+    name = models.CharField(
         max_length=255,
         blank=False,
         null=False,
-        help_text="The name of the item being purchased"
+        help_text="The name of the item in inventory"
     )
+    quantity = models.PositiveIntegerField(
+        blank=False,
+        null=False,
+        help_text="The number of items in stock"
+    )
+    cost_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        blank=False,
+        null=False,
+        help_text="The cost price of the item in USD"
+    )
+    selling_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=False,
+        help_text="The selling price of the item in USD"
+    )
+
+    def get_selling_price(self):
+        sell_price = self.cost_price * Decimal('1.4')  # Assuming a 40% markup
+        return sell_price
+    
+    def save(self, *args, **kwargs):
+        if not self.selling_price:
+            self.selling_price = self.get_selling_price()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.name} - {self.quantity} in stock."
+    
+    class Meta:
+        verbose_name = "Inventory Item"
+        verbose_name_plural = "Inventory Items"
+
+class StorePurchase(models.Model):
+    date = models.DateTimeField(default=now)
+    item = models.ForeignKey(Inventory, on_delete=models.CASCADE)  # referencing Inventory
     amount = models.DecimalField(
         max_digits=10,
         decimal_places=2,
@@ -102,6 +142,15 @@ class OnlinePurchase(StorePurchase):
         default=False,
         help_text="Indicates if the online purchase has been delivered"
     )
+
+    def get_tracking_number(self):
+        num = random.randint(1000000000, 9999999999)
+        return num
+    
+    def save(self, *args, **kwargs):
+        if not self.tracking_number:
+            self.tracking_number = self.get_tracking_number()
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return f"{super().__str__()}, Delivery Method: {self.delivery_method}, Tracking Number: {self.tracking_number or 'N/A'}"
@@ -109,3 +158,5 @@ class OnlinePurchase(StorePurchase):
     class Meta:
         verbose_name = "Online Purchase"
         verbose_name_plural = "Online Purchases"
+
+

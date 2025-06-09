@@ -1,6 +1,6 @@
 # forms.py
 from django import forms
-from .models import StorePurchase, OnlinePurchase
+from .models import Inventory, StorePurchase, OnlinePurchase
 
 class StorePurchaseForm(forms.ModelForm):
     class Meta:
@@ -12,7 +12,7 @@ class StorePurchaseForm(forms.ModelForm):
         ]
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
-            'item': forms.TextInput(attrs={'class': 'form-control'}),
+            'item': forms.Select(attrs={'class': 'form-select'}),
             'amount': forms.NumberInput(attrs={'class': 'form-control'}),
             'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
             'customer_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -27,7 +27,7 @@ class OnlinePurchaseForm(forms.ModelForm):
         exclude = ['sold_by']  # Explicitly exclude inherited field
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
-            'item': forms.TextInput(attrs={'class': 'form-control'}),
+            'item': forms.Select(attrs={'class': 'form-select'}),
             'amount': forms.NumberInput(attrs={'class': 'form-control'}),
             'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
             'customer_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -37,5 +37,10 @@ class OnlinePurchaseForm(forms.ModelForm):
             'delivery_method': forms.Select(attrs={'class': 'form-select'}),
             'channel': forms.Select(attrs={'class': 'form-select'}),
             'tracking_number': forms.TextInput(attrs={'class': 'form-control'}),
-            'delivered': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-        }
+                'delivered': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Populate the item field with Inventory objects
+        self.fields['item'].queryset = Inventory.objects.all()

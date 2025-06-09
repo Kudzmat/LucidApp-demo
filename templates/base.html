@@ -40,15 +40,26 @@
             <a class="nav-link" href="{% url 'home:home' %}">🏠 Home</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#salesMenu" role="button" aria-expanded="false">
+              🛍 Store Sales
+            </a>
+            <div class="collapse" id="salesMenu">
+              <ul class="list-unstyled ms-3">
+                <li><a href="{% url 'sales:new_sale' %}" class="nav-link">Register Store Sale</a></li>
+                <li><a href="{% url 'sales:new_online_sale' %}" class="nav-link">Register Online Sale</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#ordersMenu" role="button" aria-expanded="false">
-              🧾 Store
+              🧾 Inventory/Orders
             </a>
             <div class="collapse" id="ordersMenu">
               <ul class="list-unstyled ms-3">
-                <li><a href="{% url 'orders:new_order' %}" class="nav-link"> New Store Order</a></li>
-                <li><a href="{% url 'orders:view_orders' %}" class="nav-link">View Store Orders</a></li>
-                <li><a href="{% url 'sales:new_sale' %}" class="nav-link">Register Store Sale</a></li>
-                <li><a href="{% url 'sales:new_online_sale' %}" class="nav-link">Register Online Sale</a></li>
+                <li><a href="{% url 'orders:new_existing_order' %}" class="nav-link"> ReStock Order</a></li>
+                <li><a href="{% url 'orders:new_order' %}" class="nav-link"> New Stock Order</a></li>
+                <li><a href="{% url 'orders:view_orders' %}" class="nav-link">View Stock Orders</a></li>
+                <li><a href="{% url 'orders:view_inventory' %}" class="nav-link">View Inventory</a></li>
               </ul>
             </div>
           </li>

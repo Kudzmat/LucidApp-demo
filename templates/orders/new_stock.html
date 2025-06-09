@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-sm mx-auto p-4" style="max-width: 600px;">
+    <h2 class="mb-4 text-center">📦 New Stock Order</h2>
+    <h3 class="mb-4 text-center">Your current balance is: ${{ current_balance|intcomma  }}</h3>
+    <form method="post">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="mb-3">
+          <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}
+            <div class="form-text">{{ field.help_text }}</div>
+          {% endif %}
+          {% if field.errors %}
+            <div class="text-danger small">{{ field.errors|striptags }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Submit Order</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

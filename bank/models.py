@@ -41,8 +41,8 @@ class BankTransaction(models.Model):
         
     def __str__(self):
         if self.debit > 0:
-            return f"{self.date} - Debit: {self.debit} | {self.transaction} | Balance: {self.balance}"
+            return f"{self.date} - Debit: {self.debit} | {self.description} | Balance: {self.balance}"
         elif self.credit > 0:
-            return f"{self.date} - Credit: {self.credit} | {self.transaction} | Balance: {self.balance}"
+            return f"{self.date} - Credit: {self.credit} | {self.description} | Balance: {self.balance}"
         else:
             return "No transaction"

@@ -13,35 +13,23 @@
         <tr>
           <th scope="col">Date</th>
           <th scope="col">Description</th>
-          <th scope="col">Type</th>
-          <th scope="col">Amount (USD)</th>
+          <th scope="col">Debit</th>
+          <th scope="col">Credit</th>
           <th scope="col">Balance (USD)</th>
+          <th scope="col">Notes</th>
         </tr>
       </thead>
       <tbody>
         {% if transactions %}
-          {% for item in transactions %}
-          <tr>
-            <td>{{ item.date|date:"Y-m-d H:i" }}</td>
-            <td>{{ item.description }}</td>
-            <td>
-              {% if item.type == 'withdrawal' %}
-                <span class="text-danger">Withdrawal</span>
-              {% elif item.type == 'deposit' %}
-                <span class="text-success">Deposit</span>
-              {% else %}
-                {{ item.type|capfirst }}
-              {% endif %}
-            </td>
-            <td>
-              {% if item.type == 'withdrawal' %}
-                -{{ item.amount }}
-              {% else %}
-                +{{ item.amount }}
-              {% endif %}
-            </td>
-            <td>{{ item.balance }}</td>
-          </tr>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.date }}</td>
+            <td>{{ transaction.transaction }}</td>
+            <td>${{ transaction.debit|intcomma }}</td>
+            <td>${{ transaction.credit|intcomma }}</td>
+            <td>${{ transaction.balance|intcomma }}</td>
+            <td>{{ transaction.notes|default:"N/A" }}</td>
+        </tr>
           {% endfor %}
         {% else %}
           <tr>

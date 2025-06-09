@@ -23,9 +23,9 @@ def withdrawal(request):
         if form.is_valid():
 
             # get data from form
-            date=form.cleaned_data['date'],
-            description=form.cleaned_data['description'],
-            amount=form.cleaned_data['amount'],
+            date=form.cleaned_data['date']
+            description=form.cleaned_data['description']
+            amount=form.cleaned_data['amount']
             notes=form.cleaned_data['notes']
 
             # get current balance
@@ -62,13 +62,15 @@ def deposit(request):
         if form.is_valid():
 
             # get data from form
-            date=form.cleaned_data['date'],
-            description=form.cleaned_data['description'],
-            amount=form.cleaned_data['amount'],
+            date=form.cleaned_data['date']
+            description=form.cleaned_data['description']
+            amount=form.cleaned_data['amount']
             notes=form.cleaned_data['notes']
 
             # get current balance
             current_balance = get_current_balance()
+            print(f"Current Balance: {current_balance}")
+            print(f"Amount to Deposit: {amount}")
             # calculate new balance
             new_balance = current_balance + amount
       

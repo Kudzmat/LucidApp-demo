@@ -11,7 +11,7 @@ class WithdrawalForm(forms.Form):
 
 
 class DepositForm(forms.Form):
-    forms.DateTimeField(
+    date = forms.DateTimeField(
         widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         help_text="Enter the date and time of the event")
     description = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Payment for order, supplier...'}))

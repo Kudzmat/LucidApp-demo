@@ -3,3 +3,4 @@ from .models import *
 
 admin.site.register(StorePurchase)
 admin.site.register(OnlinePurchase)
+admin.site.register(Inventory)
