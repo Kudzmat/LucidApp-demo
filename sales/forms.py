@@ -1,46 +1,113 @@
 # forms.py
 from django import forms
-from .models import Inventory, StorePurchase, OnlinePurchase
+from .models import *
+from django.contrib.auth.models import User
 
-class StorePurchaseForm(forms.ModelForm):
-    class Meta:
-        model = StorePurchase
-        fields = [
-            'date', 'item', 'amount', 'quantity',
-            'customer_name', 'customer_email', 'customer_address',
-            'sold_by'
-        ]
-        widgets = {
-            'date': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
-            'item': forms.Select(attrs={'class': 'form-select'}),
-            'amount': forms.NumberInput(attrs={'class': 'form-control'}),
-            'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
-            'customer_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'customer_email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'customer_address': forms.TextInput(attrs={'class': 'form-control'}),
-            'sold_by': forms.TextInput(attrs={'class': 'form-control'}),
-        }
+class StorePurchaseForm(forms.Form):
+    # Fields for StorePurchase
+    date = forms.DateTimeField(
+        widget=forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
+        label="Purchase Date"
+    )
+    item = forms.ModelChoiceField(
+        queryset=Inventory.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label="Item"
+    )
+    quantity = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control'}),
+        label="Quantity"
+    )
+    sold_by = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label="Sold By"
+    )
 
-class OnlinePurchaseForm(forms.ModelForm):
-    class Meta:
-        model = OnlinePurchase
-        exclude = ['sold_by']  # Explicitly exclude inherited field
-        widgets = {
-            'date': forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
-            'item': forms.Select(attrs={'class': 'form-select'}),
-            'amount': forms.NumberInput(attrs={'class': 'form-control'}),
-            'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
-            'customer_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'customer_email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'customer_address': forms.TextInput(attrs={'class': 'form-control'}),
-            'assigned_to': forms.TextInput(attrs={'class': 'form-control'}),
-            'delivery_method': forms.Select(attrs={'class': 'form-select'}),
-            'channel': forms.Select(attrs={'class': 'form-select'}),
-            'tracking_number': forms.TextInput(attrs={'class': 'form-control'}),
-                'delivered': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            }
+    # Fields for Customer details
+    customer_name = forms.CharField(
+        max_length=255,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label="Customer Name"
+    )
+    customer_email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'form-control'}),
+        label="Customer Email"
+    )
+    customer_address = forms.CharField(
+        max_length=255,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label="Customer Address"
+    )
+    customer_city = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label="Customer City"
+    )
+    customer_country = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label="Customer Country"
+    )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Populate the item field with Inventory objects
-        self.fields['item'].queryset = Inventory.objects.all()
+class OnlinePurchaseForm(forms.Form):
+    # Fields for OnlinePurchase
+    date = forms.DateTimeField(
+        widget=forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),
+        label="Purchase Date"
+    )
+    item = forms.ModelChoiceField(
+        queryset=Inventory.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label="Item"
+    )
+
+    quantity = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control'}),
+        label="Quantity"
+    )
+    assigned_to = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label="Assigned To"
+    )
+    delivery_method = forms.ChoiceField(
+        choices=[('standard', 'Standard Shipping'), ('express', 'Express Shipping'), ('pickup', 'In-Store Pickup')],
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label="Delivery Method"
+    )
+    channel = forms.ChoiceField(
+        choices=[('website', 'Website'), ('whatsapp', 'WhatsApp'), ('instagram', 'Instagram')],
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        label="Channel"
+    )
+
+    # Fields for Customer details
+    customer_name = forms.CharField(
+        max_length=255,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label="Customer Name"
+    )
+    customer_email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'form-control'}),
+        label="Customer Email"
+    )
+    customer_address = forms.CharField(
+        max_length=255,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label="Customer Address"
+    )
+    customer_city = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label="Customer City"
+    )
+    customer_country = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+        label="Customer Country"
+    )

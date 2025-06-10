@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Monthly Performance</h2>
+
+  <form method="get" class="mb-4">
+    <label for="month">Select Month:</label>
+    <input type="month" id="month" name="month" value="{{ selected_month }}">
+    <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+  </form>
+
+  <div class="card shadow p-4 mb-5">
+    <h5 class="card-title">Revenue for {{ selected_month }}</h5>
+    <canvas id="revenueChart" height="100"></canvas>
+  </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('revenueChart').getContext('2d');
+
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: {{ labels|safe }},
+      datasets: [{
+        label: 'Daily Revenue (USD)',
+        data: {{ chart_data|safe }},
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 2,
+        tension: 0.3,
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Revenue ($)'
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: 'Day of Month'
+          }
+        }
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return '$' + context.formattedValue;
+            }
+          }
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "sales",
     "orders",
     "home",
+    "performance",
 ]
 
 MIDDLEWARE = [

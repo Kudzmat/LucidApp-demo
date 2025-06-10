@@ -60,6 +60,7 @@ class StorePurchase(models.Model):
     quantity = models.PositiveIntegerField(
         blank=False,
         null=False,
+        default=1,
         help_text="The number of items being purchased"
     )
     total = models.DecimalField(
@@ -70,28 +71,19 @@ class StorePurchase(models.Model):
         help_text="The total cost of the purchase in USD",
         default=Decimal('0.00')
     )
-    customer_name = models.CharField(
-        max_length=255,
+    customer_details = models.ForeignKey(
+        'Customer',
+        on_delete=models.CASCADE,
+        default=None,
         blank=False,
         null=False,
-        help_text="The name of the customer making the purchase"
-    )
-    customer_email = models.EmailField(
-        blank=False,
-        null=False,
-        help_text="The email address of the customer"
-    )
-    customer_address = models.CharField(
-        max_length=255,
-        default="N/A",
-        blank=True,
-        null=False,
-        help_text="The address of the customer"
+        help_text="The customer who made the purchase"
     )
     sold_by = models.CharField(
         max_length=255,
-        blank=False,
+        blank=True,
         null=False,
+        default="N/A",
         help_text="The name of the person who sold the item"
     )
 
@@ -99,13 +91,12 @@ class StorePurchase(models.Model):
         self.total = self.amount * self.quantity
         super().save(*args, **kwargs)
     def __str__(self):
-        return f"{self.item} - {self.quantity} @ ${self.amount} each, Total: ${self.total}, Customer: {self.customer_name}"
+        return f"{self.item} - {self.quantity} @ ${self.amount} each, Total: ${self.total}, Customer: {self.customer_details.name}"
     class Meta:
         verbose_name = "Store Purchase"
         verbose_name_plural = "Store Purchases"
 
 class OnlinePurchase(StorePurchase):
-    sold_by = None  # No need to specify sold_by for online purchases
     assigned_to = models.CharField(
         max_length=255,
         blank=True,
@@ -159,4 +150,42 @@ class OnlinePurchase(StorePurchase):
         verbose_name = "Online Purchase"
         verbose_name_plural = "Online Purchases"
 
+class Customer(models.Model):
+    name = models.CharField(
+        max_length=255,
+        blank=False,
+        null=False,
+        help_text="The name of the customer"
+    )
+    email = models.EmailField(
+        blank=False,
+        null=False,
+        help_text="The email address of the customer"
+    )
+    address = models.CharField(
+        max_length=255,
+        default="N/A",
+        blank=True,
+        null=False,
+        help_text="The address of the customer"
+    )
+    city = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text="The city of the customer"
+    )
+    country = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text="The country of the customer"
+    )
+
+    def __str__(self):
+        return f"{self.name} - {self.email}"
+    
+    class Meta:
+        verbose_name = "Customer"
+        verbose_name_plural = "Customers"
 
